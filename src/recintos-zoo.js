@@ -62,50 +62,42 @@ class RecintosZoo {
     //Pega os bioma(s) que o animal pode ficar
     biomasDoAnimal = possivelAnimal.bioma;
 
+    //Espaco que o animal vai ocupar
+    const espacoDoAnimal = possivelAnimal.tamanho * quantidade;
+
     //Faz um loop em todos os biomas, e verifica se o bioma é igual ao que o animal pode habitar
     for (let lg of this.lugares) {
       if (lg.bioma.some((bio) => biomasDoAnimal.includes(bio))) {
-        possiveisLugares.push(lg);
-      }
-    }
+        let animalJaPresente =
+          lg.animais_existentes.length > 0 ? lg.animais_existentes[0] : "";
+        let quantidadeAnimais = lg.animais_existentes.length;
+        let espacoOcupado = 0;
 
-    //valida os biomas em que o animal pode viver
-    for (let lg of possiveisLugares) {
-      let animalJaPresente =
-        lg.animais_existentes.length > 0 ? lg.animais_existentes[0] : "";
-      let quantidadeAnimais = lg.animais_existentes.length;
-      let espacoOcupado = 0;
-
-      //Se tiver um animal no bioma, calcula o espaco que ele esta ocupando
-      if (animalJaPresente) {
-        for (let an of this.animais) {
-          if (an.especie === animalJaPresente.toUpperCase()) {
-            espacoOcupado = quantidadeAnimais * an.tamanho;
-            break;
+        //Se tiver um animal no bioma, calcula o espaco que ele esta ocupando
+        if (animalJaPresente) {
+          for (let an of this.animais) {
+            if (an.especie === animalJaPresente.toUpperCase()) {
+              espacoOcupado = quantidadeAnimais * an.tamanho;
+              break;
+            }
           }
         }
-      }
 
-      if (
-        espacoOcupado > lg.tamanho_total ||
-        possivelAnimal.tamanho * quantidade + espacoOcupado > lg.tamanho_total
-      ) {
-        possiveisLugares = possiveisLugares.filter(
-          (lugar) => lugar.numero !== lg.numero
-        );
+        if (
+          espacoOcupado > lg.tamanho_total ||
+          espacoDoAnimal + espacoOcupado > lg.tamanho_total
+        ) {
+          //Seta os valores para 0 ou ""
+          animalJaPresente = "";
+          quantidadeAnimais = 0;
+          espacoOcupado = 0;
+        } else {
+          possiveisLugares.push(lg);
+        }
       }
-
-      //Seta os valores para 0 ou ""
-      animalJaPresente = "";
-      quantidadeAnimais = 0;
-      espacoOcupado = 0;
     }
 
     const recintosViaveis = [];
-
-    //Espaco que o animal vai ocupar
-    const espacoDoAnimal = possivelAnimal.tamanho * quantidade;
-    console.log(possivelAnimal);
 
     possiveisLugares.map((lugar) => {
       let animaisPresentes = lugar.animais_existentes;
@@ -140,6 +132,7 @@ const recintos = new RecintosZoo();
 // console.log(recintos.analisaRecintos("leopardo", -12));
 // console.log(recintos.analisaRecintos("macaco", 10));
 // console.log(recintos.analisaRecintos("macaco", 2));
+// console.log(recintos.analisaRecintos("hipopotamo", 2));
 // console.log(recintos.analisaRecintos("crocodilo", 1));
 
 export { RecintosZoo as RecintosZoo };

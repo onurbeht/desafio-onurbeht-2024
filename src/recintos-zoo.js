@@ -102,6 +102,11 @@ class RecintosZoo {
     }
 
     const recintosViaveis = [];
+
+    //Espaco que o animal vai ocupar
+    const espacoDoAnimal = possivelAnimal.tamanho * quantidade;
+    console.log(possivelAnimal);
+
     possiveisLugares.map((lugar) => {
       let animaisPresentes = lugar.animais_existentes;
       let espacoDisponivel = 0;
@@ -114,7 +119,7 @@ class RecintosZoo {
           }
         }
       }
-      espacoDisponivel = lugar.tamanho_total - espacoOcupado;
+      espacoDisponivel = lugar.tamanho_total - espacoOcupado - espacoDoAnimal;
 
       recintosViaveis.push(
         `Recinto ${lugar.numero} (espaço livre: ${espacoDisponivel} total: ${lugar.tamanho_total}) `
@@ -134,6 +139,7 @@ const recintos = new RecintosZoo();
 // console.log(recintos.analisaRecintos("macaco", 0));
 // console.log(recintos.analisaRecintos("leopardo", -12));
 // console.log(recintos.analisaRecintos("macaco", 10));
-console.log(recintos.analisaRecintos("crocodilo", 1));
+// console.log(recintos.analisaRecintos("macaco", 2));
+// console.log(recintos.analisaRecintos("crocodilo", 1));
 
 export { RecintosZoo as RecintosZoo };
